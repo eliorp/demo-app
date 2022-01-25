@@ -16,4 +16,5 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Running SourceGuard code analysis
-        run: /sourceguard-cli --source ./ | echo "test"
+        continue-on-error: true
+        run: /sourceguard-cli --source ./ 
