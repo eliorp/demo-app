@@ -1,0 +1,19 @@
+name: SourceGuard Scan
+on: [push,pull_request]
+jobs:
+  code-analysis:
+    runs-on: ubuntu-latest
+    container:
+      image: sourceguard/sourceguard-cli
+    env:
+      SG_CLIENT_ID: ${{ secrets.SG_CLIENT_ID }}
+      SG_SECRET_KEY: ${{ secrets.SG_SECRET_KEY }}
+    steps:
+      - name: Obtain Latest Git ONLY within container for checkout
+        run: apk add git --update-cache
+        
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Running SourceGuard code analysis
+        run: /sourceguard-cli --src ./
