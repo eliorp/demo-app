@@ -16,4 +16,4 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Running SourceGuard code analysis
-        run: /sourceguard-cli --source ./ -x "**/test*/**" -d || echo "SourceGuard Scan Completed!
+        run: /sourceguard-cli --source ./
