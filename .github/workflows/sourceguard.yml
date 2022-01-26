@@ -8,10 +8,7 @@ jobs:
     env:
       SG_CLIENT_ID: ${{ secrets.SG_CLIENT_ID }}
       SG_SECRET_KEY: ${{ secrets.SG_SECRET_KEY }}
-    steps:
-      - name: Obtain Latest Git ONLY within container for checkout
-        run: apk add git --update-cache
-        
+    steps:        
       - name: Checkout
         uses: actions/checkout@v2
         
