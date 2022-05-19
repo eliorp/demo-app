@@ -1,30 +1,21 @@
 image: alpine:latest
 
+variables:
+  GIT_DEPTH: 1000
+
 services:
   - docker:dind
 
 stages:
-  - build
+  - build 
   - tests
   
-  
 Code-Scan:
-  stage: tests
-  image: checkpoint/shiftleft:latest
+  stage: build
+  image: sourceguard/sourceguard-cli:latest
   script:
-    - shiftleft code-scan -s ./
-
-Iac-Assessment:
-  stage: tests
-  image: checkpoint/shiftleft:latest
-  script:
-    - shiftleft -D iac-assessment -p ./terraform-template -r -64 -s critical
-
-Image-Scan:
-  stage: tests
-  image: checkpoint/shiftleft:latest
-  script:
-    - shiftleft image-scan -i release/demo-app-image.tar
+    - /sourceguard-cli -s . -nc -D
+  allow_failure: true
 
 DockerBuild:
   stage: build
@@ -34,6 +25,12 @@ DockerBuild:
     paths:
       - release
   script:
-    - docker build -t checkpoint/demo-app:latest .
+    - docker build -t cpx/demo-app:latest .
     - mkdir release 
-    - docker save checkpoint/demo-app:latest -o release/demo-app-image.tar
+    - docker save cpx/demo-app:latest -o release/demo-app-image.tar
+
+Image-Scan:
+  stage: tests
+  image: sourceguard/sourceguard-cli:latest
+  script:
+    - /sourceguard-cli -i release/demo-app-image.tar
